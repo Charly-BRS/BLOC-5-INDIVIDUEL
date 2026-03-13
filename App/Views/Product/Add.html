@@ -15,6 +15,12 @@
     </div>
     <!-- ///channel -->
 
+    {% if error is defined and error %}
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
+    {% endif %}
+
     <div class="container mt-30">
         <form action="" method="post" enctype="multipart/form-data">
             <div class="row">
