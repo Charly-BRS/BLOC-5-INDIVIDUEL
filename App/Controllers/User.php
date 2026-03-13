@@ -41,22 +41,31 @@ class User extends \Core\Controller
      * Page de création de compte
      */
     public function registerAction()
-    {
-        if(isset($_POST['submit'])){
-            $f = $_POST;
+{
+    if (isset($_POST['submit'])) {
+        $f = $_POST;
 
-            if($f['password'] !== $f['password-check']){
-                // TODO: Gestion d'erreur côté utilisateur
+        try {
+            if ($f['password'] !== $f['password-check']) {
+                throw new \Exception("Les mots de passe ne correspondent pas.");
             }
 
-            // validation
-
             $this->register($f);
-            // TODO: Rappeler la fonction de login pour connecter l'utilisateur
-        }
+            $this->login($f);
 
-        View::renderTemplate('User/register.html');
+            header('Location: /account');
+            exit;
+        } catch (\Exception $e) {
+            View::renderTemplate('User/register.html', [
+                'error' => $e->getMessage(),
+                'formData' => $f
+            ]);
+            return;
+        }
     }
+
+    View::renderTemplate('User/register.html');
+}
 
     /**
      * Affiche la page du compte
