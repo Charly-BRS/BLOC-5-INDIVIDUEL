@@ -17,30 +17,37 @@ class Product extends \Core\Controller
      * @return void
      */
     public function indexAction()
-    {
+{
+    if (isset($_POST['submit'])) {
+        try {
+            $f = $_POST;
 
-        if(isset($_POST['submit'])) {
-
-            try {
-                $f = $_POST;
-
-                // TODO: Validation
-
-                $f['user_id'] = $_SESSION['user']['id'];
-                $id = Articles::save($f);
-
-                $pictureName = Upload::uploadFile($_FILES['picture'], $id);
-
-                Articles::attachPicture($id, $pictureName);
-
-                header('Location: /product/' . $id);
-            } catch (\Exception $e){
-                    var_dump($e);
+            if (
+                !isset($_FILES['picture']) ||
+                !isset($_FILES['picture']['error']) ||
+                $_FILES['picture']['error'] === UPLOAD_ERR_NO_FILE
+            ) {
+                throw new \Exception("Une photo est obligatoire pour déposer une annonce.");
             }
-        }
 
-        View::renderTemplate('Product/Add.html');
+            $f['user_id'] = $_SESSION['user']['id'];
+            $id = Articles::save($f);
+
+            $pictureName = Upload::uploadFile($_FILES['picture'], $id);
+            Articles::attachPicture($id, $pictureName);
+
+            header('Location: /product/' . $id);
+            exit;
+        } catch (\Exception $e) {
+            View::renderTemplate('Product/Add.html', [
+                'error' => $e->getMessage()
+            ]);
+            return;
+        }
     }
+
+    View::renderTemplate('Product/Add.html');
+}
 
     /**
      * Affiche la page d'un produit
