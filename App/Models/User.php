@@ -11,15 +11,16 @@ use App\Utility;
 /**
  * User Model:
  */
-class User extends Model {
-
+class User extends Model
+{
     /**
      * Crée un utilisateur
      */
-    public static function createUser($data) {
+    public static function createUser($data)
+    {
         $db = static::getDB();
 
-        $stmt = $db->prepare('INSERT INTO users(username, email, password, salt) VALUES (:username, :email, :password,:salt)');
+        $stmt = $db->prepare('INSERT INTO users(username, email, password, salt) VALUES (:username, :email, :password, :salt)');
 
         $stmt->bindParam(':username', $data['username']);
         $stmt->bindParam(':email', $data['email']);
@@ -36,7 +37,7 @@ class User extends Model {
         $db = static::getDB();
 
         $stmt = $db->prepare("
-            SELECT * FROM users WHERE ( users.email = :email) LIMIT 1
+            SELECT * FROM users WHERE users.email = :email LIMIT 1
         ");
 
         $stmt->bindParam(':email', $login);
@@ -45,6 +46,19 @@ class User extends Model {
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
+    public static function getById($id)
+    {
+        $db = static::getDB();
+
+        $stmt = $db->prepare("
+            SELECT * FROM users WHERE id = :id LIMIT 1
+        ");
+
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
 
     /**
      * ?
@@ -52,7 +66,8 @@ class User extends Model {
      * @return string|boolean
      * @throws Exception
      */
-    public static function login() {
+    public static function login()
+    {
         $db = static::getDB();
 
         $stmt = $db->prepare('SELECT * FROM articles WHERE articles.id = ? LIMIT 1');
@@ -61,6 +76,4 @@ class User extends Model {
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
-
-
 }
