@@ -1,13 +1,22 @@
 {
-    "require": {
-        "twig/twig": "~3.0",
-      "ext-pdo": "*",
-      "ext-json": "*"
-    },
-    "autoload": {
-        "psr-4": {
-            "Core\\": "Core/",
-            "App\\": "App/"
-        }
+  "require": {
+    "php": "^7.4",
+    "twig/twig": "^3.0",
+    "ext-pdo": "*",
+    "ext-json": "*"
+  },
+  "config": {
+    "platform": {
+      "php": "7.4.33"
     }
+  },
+  "autoload": {
+    "psr-4": {
+      "Core\\": "Core/",
+      "App\\": "App/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "9.6.34"
+  }
 }
