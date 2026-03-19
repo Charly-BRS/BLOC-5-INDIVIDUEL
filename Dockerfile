@@ -20,4 +20,6 @@ COPY . /var/www/html
 
 RUN git config --global --add safe.directory /var/www/html
 
+RUN composer install --no-interaction --no-dev --prefer-dist --optimize-autoloader
+
 RUN chown -R www-data:www-data /var/www/html
